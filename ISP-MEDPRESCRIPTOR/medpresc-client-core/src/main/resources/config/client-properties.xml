@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+	<comment>Client properties</comment>
+	<entry key="rootPath">${reports.dir}</entry>
+	<entry key="repoFilePath">${tmp.dir}</entry>
+
+	<!-- MUFACE Prescription -->
+	<entry key="MufaceTemplateFilePath">/compiled/</entry>
+	<entry key="MufaceTemplateFileName">muface-prescription.jasper</entry>
+	<entry key="MufaceDocName">MUFACE-PRESCRIPTION</entry>
+
+</properties>
