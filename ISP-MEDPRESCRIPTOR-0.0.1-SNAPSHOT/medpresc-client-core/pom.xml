@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- The Maven module definition for the client application. This tells Maven 
+	which dependencies we want to use and how to build our application. Most 
+	of the work is taken care of for us by the javafx-maven-plugin. For more 
+	information on this see: https://github.com/zonski/javafx-maven-plugin -->
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+
+	<!-- this module is part of the bigger project, this allows us to build 
+		the whole project in one hit -->
+	<parent>
+		<groupId>com.isp.medpresc</groupId>
+		<artifactId>ISP-MEDPRESCRIPTOR</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+	</parent>
+
+	<artifactId>medpresc-client-core</artifactId>
+	<packaging>jar</packaging>
+
+	<dependencies>
+
+		<dependency>
+			<groupId>org.apache.pdfbox</groupId>
+			<artifactId>pdfbox</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>net.sf.jasperreports</groupId>
+			<artifactId>jasperreports</artifactId>
+		</dependency>
+
+	</dependencies>
+
+
+	<build>
+		<!-- In production exclude log4j.properties from jar. -->
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<excludes>
+					<exclude>config/*</exclude>
+					<exclude>reports/*</exclude>
+					<exclude>bin/*</exclude>
+				</excludes>
+				<includes>
+					<include>*.css</include>
+					<include>forms/*</include>
+					<include>images/*</include>
+				</includes>
+			</resource>
+		</resources>
+
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+
+				<configuration>
+					<outputDirectory>${build.dir}\lib</outputDirectory>
+					<archive>
+						<manifest>
+							<mainClass>com.isp.medpresc.MedPrescriptorMain</mainClass>
+						</manifest>
+					</archive>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<artifactId>maven-resources-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>copy-resources</id>
+						<!-- here the phase you need -->
+						<phase>package</phase>
+						<goals>
+							<goal>copy-resources</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>${build.dir}/bin</outputDirectory>
+							<resources>
+								<resource>
+									<directory>src/main/resources/bin</directory>
+									<filtering>true</filtering>
+								</resource>
+							</resources>
+						</configuration>
+					</execution>
+
+
+					<execution>
+						<id>copy-config</id>
+						<phase>package</phase>
+						<goals>
+							<goal>copy-resources</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>${build.dir}/config</outputDirectory>
+							<resources>
+								<resource>
+									<directory>src/main/resources/config</directory>
+									<filtering>true</filtering>
+								</resource>
+							</resources>
+						</configuration>
+					</execution>
+
+					<execution>
+						<id>copy-log4j</id>
+						<phase>package</phase>
+						<goals>
+							<goal>copy-resources</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>${build.dir}/config</outputDirectory>
+							<resources>
+								<resource>
+									<directory>src/main/resources</directory>
+									<filtering>true</filtering>
+									<includes>
+										<include>log4j2.xml</include>
+									</includes>
+								</resource>
+							</resources>
+						</configuration>
+					</execution>
+
+					<execution>
+						<id>copy-reports</id>
+						<!-- here the phase you need -->
+						<phase>generate-sources</phase>
+						<goals>
+							<goal>copy-resources</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>${build.dir}/reports/templates</outputDirectory>
+							<resources>
+								<resource>
+									<directory>src/main/resources/reports</directory>
+								</resource>
+							</resources>
+						</configuration>
+
+					</execution>
+
+				</executions>
+			</plugin>
+
+
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>jasperreports-maven-plugin</artifactId>
+				<version>1.0-beta-2</version>
+
+				<configuration>
+					<includes>
+						<include>**/*.jrxml</include>
+					</includes>
+					<compiler>net.sf.jasperreports.engine.design.JRJdtCompiler</compiler>
+					<sourceDirectory>${build.dir}/reports/templates</sourceDirectory>
+					<outputDirectory>${build.dir}/reports/compiled</outputDirectory>
+					<outputFileExt>.jasper</outputFileExt>
+					<xmlValidation>true</xmlValidation>
+					<verbose>true</verbose>
+				</configuration>
+				<executions>
+					<execution>
+						<phase>process-sources</phase>
+						<goals>
+							<goal>compile-reports</goal>
+						</goals>
+					</execution>
+				</executions>
+				<dependencies>
+					<dependency>
+						<groupId>net.sf.jasperreports</groupId>
+						<artifactId>jasperreports</artifactId>
+						<version>${jasperReport.version}</version>
+					</dependency>
+				</dependencies>
+			</plugin>
+
+		</plugins>
+
+	</build>
+
+</project>
