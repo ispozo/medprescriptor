@@ -1,0 +1,288 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- The main parent project definition for the entire application (server 
+	and client). This defines the modules that make up the project so that they 
+	can be built as one (and opened as a single project in an IDE). This top 
+	level POM does not provide any build steps itself but is just an aggregator 
+	of the modules. -->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>com.isp.medpresc</groupId>
+	<artifactId>ISP-MEDPRESCRIPTOR</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<packaging>pom</packaging>
+
+	<!-- organisation is needed by the JavaFX plugin but we define it here for 
+		general use -->
+	<organization>
+		<name>ISP-MEDPRESCRIPTOR</name>
+	</organization>
+
+	<!-- define the common properties used throughout the modules - allows us 
+		to keep things consistent -->
+	<properties>
+		<java-version>1.8</java-version>
+		<project.build.sourceEncoding>ISO-8859-1</project.build.sourceEncoding>
+
+		<!-- Maven -->
+		<maven-pmd-plugin.version>3.0.1</maven-pmd-plugin.version>
+		<maven-checkstyle-plugin.version>2.1</maven-checkstyle-plugin.version>
+		<maven-jar-plugin.version>2.4</maven-jar-plugin.version>
+		<!-- JUnit -->
+		<org.junit.version>4.12</org.junit.version>
+		<pl.pragmatists.junitparams>1.0.2</pl.pragmatists.junitparams>
+		<!-- App -->
+
+		<!-- Log -->
+		<log4j2.version>2.3</log4j2.version>
+		<commons-logging.version>1.1.1</commons-logging.version>
+		<slf4j-api.version>1.7.7</slf4j-api.version>
+		<slf4j-log4j12.version>1.7.7</slf4j-log4j12.version>
+
+		<!-- Utils -->
+		<org.apache.poi.version>3.9</org.apache.poi.version>
+		<jasperReport.version>6.0.3</jasperReport.version>
+		<pdfbox.version>2.0.2</pdfbox.version>
+
+	</properties>
+
+	<!-- define the sub-modules - Maven will work out the build order based 
+		on their inter-dependencies -->
+
+	<modules>
+		<module>medpresc-client-core</module>
+		<module>medpresc-server-core</module>
+	</modules>
+
+	<build>
+
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.3</version>
+				<configuration>
+					<source>${java-version}</source>
+					<target>${java-version}</target>
+					<encoding>${project.build.sourceEncoding}</encoding>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<version>2.4</version>
+
+				<configuration>
+					<outputDirectory>${build.dir}/lib</outputDirectory>
+					<archive>
+						<index>false</index>
+						<manifest>
+							<addClasspath>true</addClasspath>
+							<classpathPrefix></classpathPrefix>
+							<useUniqueVersions>false</useUniqueVersions>
+							<!-- <mainClass>${build.metainf.main.class}</mainClass> -->
+							<!-- Only used if classpathLayoutType is set to 'custom' -->
+							<!-- <classpathLayoutType>custom</classpathLayoutType> <customClasspathLayout>$${artifact.artifactId}.$${artifact.extension}</customClasspathLayout> -->
+						</manifest>
+						<manifestEntries>
+							<Class-Path>./</Class-Path>
+							<company>ISP</company>
+						</manifestEntries>
+					</archive>
+				</configuration>
+
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<version>2.8</version>
+				<executions>
+					<execution>
+						<id>copy-dependencies</id>
+						<phase>package</phase>
+						<goals>
+							<goal>copy-dependencies</goal>
+						</goals>
+
+						<configuration>
+							<outputDirectory>${build.dir}/lib</outputDirectory>
+							<overWriteReleases>false</overWriteReleases>
+							<overWriteSnapshots>false</overWriteSnapshots>
+							<overWriteIfNewer>true</overWriteIfNewer>
+							<excludeTransitive>false</excludeTransitive>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-pmd-plugin</artifactId>
+				<version>${maven-pmd-plugin.version}</version>
+				<configuration>
+					<rulesets>
+						<ruleset>${project.parent.basedir}\medpresc-resources\pmd\PMD-Ruleset.xml</ruleset>
+					</rulesets>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-checkstyle-plugin</artifactId>
+				<version>${maven-checkstyle-plugin.version}</version>
+				<configuration>
+					<configLocation>${project.parent.basedir}\medpresc-resources\checkstyle\checkstyle.xml</configLocation>
+				</configuration>
+			</plugin>
+
+		</plugins>
+
+	</build>
+
+	<dependencyManagement>
+		<dependencies>
+
+			<!-- Logging -->
+			<dependency>
+				<groupId>org.slf4j</groupId>
+				<artifactId>slf4j-api</artifactId>
+				<version>${slf4j-api.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.slf4j</groupId>
+				<artifactId>slf4j-log4j12</artifactId>
+				<version>${slf4j-log4j12.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>commons-logging</groupId>
+				<artifactId>commons-logging</artifactId>
+				<version>${commons-logging.version}</version>
+			</dependency>
+
+			<!-- Log4j2 -->
+			<dependency>
+				<groupId>org.apache.logging.log4j</groupId>
+				<artifactId>log4j-api</artifactId>
+				<version>${log4j2.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.logging.log4j</groupId>
+				<artifactId>log4j-core</artifactId>
+				<version>${log4j2.version}</version>
+			</dependency>
+
+			<!-- Log4j2 Bridges -->
+			<dependency>
+				<groupId>org.apache.logging.log4j</groupId>
+				<artifactId>log4j-1.2-api</artifactId>
+				<version>${log4j2.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.logging.log4j</groupId>
+				<artifactId>log4j-jcl</artifactId>
+				<version>${log4j2.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.logging.log4j</groupId>
+				<artifactId>log4j-slf4j-impl</artifactId>
+				<version>${log4j2.version}</version>
+			</dependency>
+
+
+			<dependency>
+				<groupId>org.apache.pdfbox</groupId>
+				<artifactId>pdfbox</artifactId>
+				<version>${pdfbox.version}</version>
+			</dependency>
+			
+			<dependency>
+				<groupId>net.sf.jasperreports</groupId>
+				<artifactId>jasperreports</artifactId>
+				<version>${jasperReport.version}</version>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
+	<dependencies>
+
+		<!-- Log4j2 Bridges -->
+		<dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-1.2-api</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-jcl</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-slf4j-impl</artifactId>
+		</dependency>
+
+
+		<dependency>
+			<groupId>commons-logging</groupId>
+			<artifactId>commons-logging</artifactId>
+		</dependency>
+	</dependencies>
+
+	<profiles>
+
+		<profile>
+			<id>development</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+			<properties>
+				<java.home.location>${env.JAVA_HOME}</java.home.location>
+				<build.dir>D:\MyWorkSpaces\Recetas\work\deployment\medPrescriptor\ISP-MEDPRESCRIPTOR-${project.version}</build.dir>
+				<reports.dir>${build.dir}\reports</reports.dir>
+				<tmp.dir>${build.dir}\temp</tmp.dir>
+			</properties>
+
+		</profile>
+
+		<profile>
+			<id>delivery</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+			<properties>
+				<java.home.location>${env.JAVA_HOME}</java.home.location>
+				<working.dir>C:\medPrescriptor\ISP-MEDPRESCRIPTOR-${project.version}</working.dir>
+				<build.dir>D:\MyWorkSpaces\Recetas\work\deployment\medPrescriptor\ISP-MEDPRESCRIPTOR-${project.version}</build.dir>
+				<reports.dir>${working.dir}\reports</reports.dir>
+				<tmp.dir>${working.dir}\temp</tmp.dir>
+			</properties>
+
+
+			<repositories>
+				<!-- Enable ATMITEC Repositories -->
+				<repository>
+					<id>delivery</id>
+					<name>ATMITEC Repositories</name>
+					<url>https://slmaven.indra.es/nexus/content/groups/ATMITEC</url>
+					<layout>default</layout>
+					<releases>
+						<enabled>true</enabled>
+						<updatePolicy>always</updatePolicy>
+					</releases>
+					<snapshots>
+						<enabled>true</enabled>
+						<updatePolicy>always</updatePolicy>
+						<checksumPolicy>fail</checksumPolicy>
+					</snapshots>
+				</repository>
+
+			</repositories>
+
+		</profile>
+
+	</profiles>
+
+</project>

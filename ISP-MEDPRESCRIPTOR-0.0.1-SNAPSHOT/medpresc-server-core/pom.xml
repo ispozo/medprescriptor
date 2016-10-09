@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- The Maven module definition for the client application. This tells Maven 
+	which dependencies we want to use and how to build our application. Most 
+	of the work is taken care of for us by the javafx-maven-plugin. For more 
+	information on this see: https://github.com/zonski/javafx-maven-plugin -->
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+
+	<!-- this module is part of the bigger project, this allows us to build 
+		the whole project in one hit -->
+	<parent>
+		<groupId>com.isp.medpresc</groupId>
+		<artifactId>ISP-MEDPRESCRIPTOR</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+	</parent>
+
+	<artifactId>medpresc-server-core</artifactId>
+	<packaging>jar</packaging>
+
+	<!-- This build config is needed for use junit test in other modules -->
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<version>${maven-jar-plugin.version}</version>
+				<!--<executions>
+					<execution>
+						<goals>
+							<goal>test-jar</goal>
+						</goals>
+					</execution>
+				</executions>-->
+			</plugin>
+		</plugins>
+	</build>
+
+	<dependencies>
+
+		
+
+
+	</dependencies>
+
+</project>

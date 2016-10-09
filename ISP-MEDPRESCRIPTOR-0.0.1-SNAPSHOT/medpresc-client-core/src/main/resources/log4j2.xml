@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="trace" name="medPrescriptor" packages="com.isp.medpresc">
+	<Appenders>
+		<RollingFile name="file"
+			fileName="${working.dir}/logs/medprescriptor.log"
+			filePattern="${working.dir}/logs/medprescriptor-%i.log"
+ 			immediateFlush="true" append="true">
+			<PatternLayout pattern="%d{dd/MM/yy HH:mm:ss} %-5p [%c{3}] %m%n" />
+			<Policies>
+				<SizeBasedTriggeringPolicy size="10 MB" />
+			</Policies>
+			<DefaultRolloverStrategy max="3" />
+		</RollingFile>
+		<Console name="stdout" target="SYSTEM_OUT">
+			<PatternLayout pattern="%d{dd/MM/yy HH:mm:ss} %-5p [%c{3}] %m%n" />
+		</Console>
+	</Appenders>
+
+	<Loggers>
+		<Root>
+			<AppenderRef ref="stdout" level="FATAL"/>
+			<AppenderRef ref="file" level="DEBUG" />
+		</Root>	
+	</Loggers>
+</Configuration>

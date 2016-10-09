@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.net.*?>
+<?import javafx.collections.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.*?>
+<?import javafx.scene.image.*?>
+<?import org.tbee.javafx.scene.layout.fxml.*?>
+<?import javafx.scene.layout.HBox?>
+
+
+<BorderPane fx:id="mainContainer" xmlns:fx="http://javafx.com/fxml/1"
+	xmlns="http://javafx.com/javafx/8" fx:controller="com.isp.medpresc.forms.MufaceFormController">
+
+	<top>
+
+	</top>
+	<left>
+		<VBox fx:id="leftContainer" spacing="5">
+		
+		</VBox>
+	</left>
+	<center>
+
+	</center>
+	<right>
+
+	</right>
+	<bottom>
+		<HBox alignment="CENTER_RIGHT" spacing="3">
+			<Button id="cleanBtn" text="Limpiar" onAction="#onCleanPrescription"
+				fx:id="cleanBtn" />
+			<Button id="printBtn" text="Imprimir" onAction="#onPrintPrescription"
+				fx:id="printBtn" />
+		</HBox>
+
+	</bottom>
+
+</BorderPane>
