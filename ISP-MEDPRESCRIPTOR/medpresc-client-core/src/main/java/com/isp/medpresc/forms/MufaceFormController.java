@@ -148,7 +148,7 @@ public class MufaceFormController extends AFormController {
         try {
             String filePath = reportMng.createMufacePrescriptionPdf(text.getText());
             PrinterManager.print(filePath, copies);
-            // text.clear();
+            text.clear();
         } catch (PrintException e) {
             showDialog(AlertType.ERROR, "No se ha podido imprimir: ", ButtonType.OK, e);
         } catch (Exception e) {
